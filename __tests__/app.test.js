@@ -29,4 +29,10 @@ describe('backend-anyapi routes', () => {
     const res = await request(app).get('/api/v1/pokemans');
     expect(res.body).toEqual(expected);
   });
+
+  it('Gets a pokemon by id', async () => {
+    const expected = await Pokemon.getById(1);
+    const res = await request(app).get(`/api/v1/pokemans/${expected.id}`);
+    expect(res.body).toEqual(expected);
+  });
 });
