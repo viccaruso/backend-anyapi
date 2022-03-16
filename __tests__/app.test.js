@@ -35,4 +35,11 @@ describe('backend-anyapi routes', () => {
     const res = await request(app).get(`/api/v1/pokemans/${expected.id}`);
     expect(res.body).toEqual(expected);
   });
+
+  it('Deletes a pokemon with a given id', async () => {
+    const expected = await Pokemon.getById(1);
+    const res = await request(app).delete(`/api/v1/pokemans/${expected.id}`);
+    expect(res.body).toEqual(expected);
+  });
+
 });
