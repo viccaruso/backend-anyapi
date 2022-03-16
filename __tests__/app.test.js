@@ -15,12 +15,12 @@ describe('backend-anyapi routes', () => {
 
   it('Creates a pokemon', async () => {
     const expected = {
-      name: 'Charmander',
-      primaryType: 'Fire',
+      name: 'Raichu',
+      primaryType: 'Electric',
       secondaryType: null
     };
     const res = await request(app).post('/api/v1/pokemans').send(expected);
-
+    console.log(res.body);
     expect(res.body).toEqual({ id: expect.any(String), ...expected });
   });
 
@@ -37,8 +37,16 @@ describe('backend-anyapi routes', () => {
   });
 
   it('Deletes a pokemon with a given id', async () => {
-    const expected = await Pokemon.getById(1);
+    const newPokemon = await Pokemon.insert({ name: 'Zapdos', primaryType: 'Electric', secondaryType: null });
+    const expected = await Pokemon.getById(newPokemon.id);
     const res = await request(app).delete(`/api/v1/pokemans/${expected.id}`);
+    expect(res.body).toEqual(expected);
+  });
+
+  it('Updates the primary_type of a pokemon with a given id', async () => {
+    const expected = { id: expect.any(String), name: 'Zapdos', primaryType: 'Fire', secondaryType: null };
+    const newPokemon = await Pokemon.insert({ name: 'Zapdos', primaryType: 'Electric', secondaryType: null });
+    const res = await request(app).patch(`/api/v1/pokemans/${newPokemon.id}`).send({ primaryType: 'Fire' });
     expect(res.body).toEqual(expected);
   });
 
